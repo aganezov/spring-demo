@@ -1,20 +1,23 @@
 package hello;
 
-import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.util.Date;
+
+@Controller
 public class GreetingController {
 
-    private static final String template = "Hello, %s%s";
-    private final AtomicLong counter = new AtomicLong();
-
-    @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name,
-                             @RequestParam(value="ending", defaultValue = "!") String ending) {
-        return new Greeting(counter.incrementAndGet(),
-                            String.format(template, name, ending));
+    @RequestMapping("/")
+    public String greeting(@RequestParam(value = "ending", required = false, defaultValue = "!") String ending,
+                           @RequestParam(value = "name", required = false, defaultValue = "World") String name,
+                           Model model) {
+        model.addAttribute("time", new Date());
+        model.addAttribute("name", name);
+        model.addAttribute("ending", ending);
+        return "basic";
     }
+
 }
